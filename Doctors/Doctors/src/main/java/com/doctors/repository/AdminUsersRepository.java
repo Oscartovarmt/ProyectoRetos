@@ -1,6 +1,6 @@
 package com.doctors.repository;
 
-
+import com.doctors.model.SpecialtyModel;
 import com.doctors.model.AdminUsersModel;
 import com.doctors.repository.crudrepository.AdminUsersCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,41 @@ public class AdminUsersRepository {
     }
 
     public Optional<AdminUsersModel> getAdminUsers(Integer id) {
-        return adminUsersCrudRepository.findById((id));
+        return adminUsersCrudRepository.findById(id);
     }
 
     public AdminUsersModel saveAdminUsers(AdminUsersModel adminUsersModel){
         return adminUsersCrudRepository.save(adminUsersModel);
     }
     public boolean deleteAdminUsers(Integer id){
-        adminUsersCrudRepository.deleteById(id);
-        return true;
+        try {
+            adminUsersCrudRepository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public AdminUsersModel updateAdminUsers(AdminUsersModel adminUsersModel){
-        return adminUsersCrudRepository.save(adminUsersModel);
-
+        if (adminUsersModel.getId() != null) {
+            Optional<AdminUsersModel> admin = adminUsersCrudRepository.findById(adminUsersModel.getId());
+            if (!admin.isEmpty()) {
+                if (adminUsersModel.getName() != null) {
+                    admin.get().setName(adminUsersModel.getName());
+                }
+                if (adminUsersModel.getEmail() != null) {
+                    admin.get().setEmail(adminUsersModel.getEmail());
+                }
+                if (adminUsersModel.getPassword() != null) {
+                    admin.get().setPassword(adminUsersModel.getPassword());
+                }
+                adminUsersModel.save(admin.get());
+                return admin.get();
+            } else {
+                return adminUsersModel;
+            }
+        } else {
+            return adminUsersModel;
+        }
     }
-
 }

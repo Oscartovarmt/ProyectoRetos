@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Table(name="reservequalification")
 
 
-public class ReserveQualificationModel implements Serializable {
+public class ScoreModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -17,16 +17,16 @@ public class ReserveQualificationModel implements Serializable {
     private Integer age;
 
 
-    public ReserveQualificationModel() {
+    public ScoreModel() {
     }
 
-    public ReserveQualificationModel(String name, String email, Integer age) {
+    public ScoreModel(String name, String email, Integer age) {
         this.name = name;
         this.email = email;
         this.age = age;
     }
 
-    public ReserveQualificationModel(Integer id, String name, String email, Integer age) {
+    public ScoreModel(Integer id, String name, String email, Integer age) {
         this.id = id;
         this.name = name;
         this.email = email;
