@@ -17,22 +17,44 @@ public class MessageRepository
     public List<MessageModel> getAllMessages() {
         return (List<MessageModel>) messageCrudRepository.findAll();
     }
-    public Optional<MessageModel> getMessage(Integer id) {
-        return messageCrudRepository.findById(id);
-
+    public Optional<MessageModel> getMessage(Integer idMessage) {
+        return messageCrudRepository.findById(idMessage);
     }
 
     public MessageModel saveMessage(MessageModel messageModel){
-
         return messageCrudRepository.save(messageModel);
     }
 
-    public boolean deleteMessage(Integer id){
-        messageCrudRepository.deleteById(id);
-        return true;
+    public boolean deleteMessage(Integer idMessage) {
+        try {
+            messageCrudRepository.deleteById(idMessage);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
+
     public MessageModel updateMessage(MessageModel messageModel){
-        return messageCrudRepository.save(messageModel);
+        if (messageModel.getIdMessage() != null) {
+            Optional<MessageModel> message = messageCrudRepository.findById(messageModel.getIdMessage());
+            if (!message.isEmpty()) {
+                if (messageModel.getMessageText() != null) {
+                    message.get().setMessageText(messageModel.getMessageText());
+                }
+                if (messageModel.getDoctor() != null) {
+                    message.get().setDoctor(messageModel.getDoctor());
+                }
+                if (messageModel.getClient() != null) {
+                    message.get().setClient(messageModel.getClient());
+                }
+                messageCrudRepository.save(message.get());
+                return message.get();
+            } else {
+                return messageModel;
+            }
+        } else {
+            return messageModel;
+        }
 
     }
 }
